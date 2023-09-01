@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Itim&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -6,7 +6,7 @@
 
 body {
   overflow-x: hidden;
-  font-family: 'Itim', cursive;
+  font-family: 'Kanit', sans-serif;
   -webkit-user-select: none;
 }
 
@@ -16,4 +16,10 @@ body {
   50% { transform: translate(0, 0) rotate(0deg); }
   75% { transform: translate(-5px, 5px) rotate(-5deg); }
   100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
 }
