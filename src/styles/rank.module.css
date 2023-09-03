@@ -3,7 +3,7 @@
         url('/assets/rank-bg.png') no-repeat center center fixed, 
         linear-gradient(180deg, rgba(1, 51, 48, 1) 57.29%, #00060C 100%);
     background-size: cover;
-    height: 100vh;
+    background-attachment: fixed;
     width: 100%;
     z-index: -1;
     position: absolute;
@@ -11,7 +11,12 @@
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
+    overflow: auto;
+    min-height: 100vh;
+    min-width: min-content;
+    gap: 3rem;
 }
+
 
 .imgLogo {
     background: url('/assets/ku-logo.png') no-repeat center center;
@@ -19,4 +24,5 @@
     position: relative;
     width: 163px;
     height: 163px;
+    min-height: 163px;
 }

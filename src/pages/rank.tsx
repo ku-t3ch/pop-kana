@@ -25,14 +25,14 @@ const Rank: NextPage<Props> = () => {
   if (!Ranks) return <div>loading</div>;
 
   return (
-    <div className="grid w-screen lg:grid-cols-3 grid-cols-2">
+    <div className="grid w-scree lg:grid-cols-3 grid-cols-2">
       <div className="hidden lg:block">
-        top 3 image rank display
+        top 3 preview image
       </div>
       <div className="flex flex-row h-screen col-span-2 relative text-3xl">
         <div className={styles.imgBackground}>
           <div className={styles.imgLogo}></div>
-          <RankList recordsInit={Ranks} />
+          <div className="relative m-5"><RankList recordsInit={Ranks} /></div>
         </div>
       </div>
     </div>
