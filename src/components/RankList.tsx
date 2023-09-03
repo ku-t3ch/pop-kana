@@ -32,17 +32,18 @@ const RankList: NextPage<Props> = ({ recordsInit }) => {
 
   return (
     <div className="flex flex-col justify-evenly">
-      <div className="flex flex-col">
+    <table>
+      <tbody>
         {Ranks?.map((e, id) => (
-          <div
-            key={id}
-            style={{color: rankColor(id + 1)}}
-          >
-            {id + 1}. {e.faculty_name} {e.count}
-          </div>
+          <tr key={id} style={{ color: rankColor(id + 1) }}>
+            <td className="pr-10">{id + 1}.</td>
+            <td className="pr-10">{e.faculty_name}</td>
+            <td>{e.count}</td>
+          </tr>
         ))}
-      </div>
-    </div>
+      </tbody>
+    </table>
+  </div>
   );
 };
 

@@ -25,8 +25,8 @@ const Rank: NextPage<Props> = () => {
   if (!Ranks) return <div>loading</div>;
 
   return (
-    <div className="grid grid-cols-3">
-      <div>
+    <div className="grid w-screen lg:grid-cols-3 grid-cols-2">
+      <div className="hidden lg:block">
         top 3 image rank display
       </div>
       <div className="flex flex-row h-screen col-span-2 relative text-3xl">
