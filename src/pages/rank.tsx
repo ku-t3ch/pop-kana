@@ -3,6 +3,7 @@ import pb from "@/services/pocketbase";
 import { NextPage } from "next";
 import { useEffect, useState } from "react";
 import RankList from "@/components/RankList";
+import styles from "@/styles/rank.module.css";
 
 interface Props {}
 
@@ -24,9 +25,17 @@ const Rank: NextPage<Props> = () => {
   if (!Ranks) return <div>loading</div>;
 
   return (
-    <>
-      <RankList recordsInit={Ranks} />
-    </>
+    <div className="grid grid-cols-3">
+      <div>
+        top 3 image rank display
+      </div>
+      <div className="flex flex-row h-screen col-span-2 relative text-3xl">
+        <div className={styles.imgBackground}>
+          <div className={styles.imgLogo}></div>
+          <RankList recordsInit={Ranks} />
+        </div>
+      </div>
+    </div>
   );
 };
 
