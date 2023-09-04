@@ -36,7 +36,7 @@ const PlacesImage: React.FC<Props> = ({ facultyName }) => {
   return (
     <div className="h-1/3">
       <img
-        className=".place_image w-full"
+        className=".place_image w-full h-full object-cover"
         src={facultyToImage[facultyName]}
         alt={`Image for ${facultyName}`}
       />

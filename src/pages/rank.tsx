@@ -28,7 +28,7 @@ const Rank: NextPage<Props> = () => {
   return (
     <div className="bg-black">
       <div className="grid h-screen w-screen grid-cols-1 lg:grid-cols-2">
-        <div className="hidden h-screen flex-col overflow-hidden lg:flex">
+        <div className="hidden h-screen flex-col overflow-auto lg:flex">
           <PlacesImage facultyName={Ranks[0]?.faculty_name as string} />
           <PlacesImage facultyName={Ranks[1]?.faculty_name as string} />
           <PlacesImage facultyName={Ranks[2]?.faculty_name as string} />
