@@ -26,16 +26,20 @@ const Rank: NextPage<Props> = () => {
   if (!Ranks) return <div>loading</div>;
 
   return (
-    <div className="grid w-scree lg:grid-cols-2 grid-cols-1">
-      <div className="hidden lg:block">
-        <PlacesImage facultyName={Ranks[0]?.faculty_name as string} />
-        <PlacesImage facultyName={Ranks[1]?.faculty_name as string} />
-        <PlacesImage facultyName={Ranks[2]?.faculty_name as string} />
-      </div>
-      <div className="flex flex-row h-screen relative text-3xl">
-        <div className={styles.imgBackground}>
-          <div className={styles.imgLogo}></div>
-          <div className="relative m-5"><RankList recordsInit={Ranks} /></div>
+    <div className="bg-black">
+      <div className="grid h-screen w-screen grid-cols-1 lg:grid-cols-2">
+        <div className="hidden h-screen flex-col overflow-hidden lg:flex">
+          <PlacesImage facultyName={Ranks[0]?.faculty_name as string} />
+          <PlacesImage facultyName={Ranks[1]?.faculty_name as string} />
+          <PlacesImage facultyName={Ranks[2]?.faculty_name as string} />
+        </div>
+        <div className="relative flex h-screen flex-row bg-black text-3xl">
+          <div className={styles.imgBackground}>
+            <div className={styles.imgLogo}></div>
+            <div className="relative m-5">
+              <RankList recordsInit={Ranks} />
+            </div>
+          </div>
         </div>
       </div>
     </div>

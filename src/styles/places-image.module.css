@@ -1,9 +1,5 @@
-.place_image_container {
-    display: flex;
-}
-
 .place_image {
     overflow: auto;
-    max-height: 33.33vh;
     width: 100%;
+    max-height: fit-content;
 }
