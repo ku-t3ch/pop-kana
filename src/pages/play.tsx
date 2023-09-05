@@ -1,6 +1,5 @@
 // type
 import type { DataInterface } from "@/interfaces/DataInterface";
-import type { EmojiInterface } from "@/interfaces/EmojiInterface";
 
 // commons
 import Image from "next/image";
@@ -8,16 +7,17 @@ import pb from "@/services/pocketbase";
 import NoSSR from "@/components/NoSSR";
 import tw from "tailwind-styled-components";
 import { useEffect, useRef, useState } from "react";
-import { randomNumber } from "@/utils/random";
 import { random as getEmoji } from "emoji-random-list";
 
 // assets
 import CatWow from "@/assets/cat-wow.png";
 import CatDefault from "@/assets/cat-default.png";
 import Background from "@/assets/background.png";
+import { randomNumber } from "@/utils/random";
+import { EmojiInterface } from "@/interfaces/EmojiInterface";
 
 // components
-import Scoreboard from "@/components/Scoreboard";
+// import Scoreboard from "@/components/Scoreboard";
 
 // rate update amount to database
 const sendPerCount = 7;
@@ -134,9 +134,9 @@ export default function Home() {
         );
       })}
 
-      <div className="fixed bottom-0">
+      {/* <div className="fixed bottom-0">
         <Scoreboard />
-      </div>
+      </div> */}
 
       <Character.Container>
         <Image
