@@ -11,8 +11,10 @@
   },
   "dependencies": {
     "@t3-oss/env-nextjs": "^0.3.1",
+    "big.js": "^6.2.1",
     "lodash": "^4.17.21",
     "next": "^13.4.2",
+    "numeral": "^2.0.6",
     "pocketbase": "^0.17.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -23,6 +25,7 @@
     "@types/eslint": "^8.37.0",
     "@types/lodash": "^4.14.197",
     "@types/node": "^18.16.0",
+    "@types/numeral": "^2.0.2",
     "@types/prettier": "^2.7.2",
     "@types/react": "^18.2.6",
     "@types/react-dom": "^18.2.4",
