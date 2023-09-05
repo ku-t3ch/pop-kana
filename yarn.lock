@@ -232,6 +232,11 @@
   resolved "https://registry.npmjs.org/@types/node/-/node-18.17.11.tgz"
   integrity sha512-r3hjHPBu+3LzbGBa8DHnr/KAeTEEOrahkcL+cZc4MaBMTM+mk8LtXR+zw+nqfjuDZZzYTYgTcpHuP+BEQk069g==
 
+"@types/numeral@^2.0.2":
+  version "2.0.2"
+  resolved "https://registry.npmjs.org/@types/numeral/-/numeral-2.0.2.tgz"
+  integrity sha512-A8F30k2gYJ/6e07spSCPpkuZu79LCnkPTvqmIWQzNGcrzwFKpVOydG41lNt5wZXjSI149qjyzC2L1+F2PD/NUA==
+
 "@types/prettier@^2.7.2":
   version "2.7.3"
   resolved "https://registry.npmjs.org/@types/prettier/-/prettier-2.7.3.tgz"
@@ -551,6 +556,11 @@ balanced-match@^1.0.0:
   version "1.0.2"
   resolved "https://registry.npmjs.org/balanced-match/-/balanced-match-1.0.2.tgz"
   integrity sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==
+
+big.js@^6.2.1:
+  version "6.2.1"
+  resolved "https://registry.npmjs.org/big.js/-/big.js-6.2.1.tgz"
+  integrity sha512-bCtHMwL9LeDIozFn+oNhhFoq+yQ3BNdnsLSASUxLciOb1vgvpHsIO1dsENiGMgbb4SkP5TrzWzRiLddn8ahVOQ==
 
 binary-extensions@^2.0.0:
   version "2.2.0"
@@ -1811,6 +1821,11 @@ normalize-range@^0.1.2:
   version "0.1.2"
   resolved "https://registry.npmjs.org/normalize-range/-/normalize-range-0.1.2.tgz"
   integrity sha512-bdok/XvKII3nUpklnV6P2hxtMNrCboOjAcyBuQnWEhO665FwrSNRxU+AqpsyvO6LgGYPspN+lu5CLtw4jPRKNA==
+
+numeral@^2.0.6:
+  version "2.0.6"
+  resolved "https://registry.npmjs.org/numeral/-/numeral-2.0.6.tgz"
+  integrity sha512-qaKRmtYPZ5qdw4jWJD6bxEf1FJEqllJrwxCLIm0sQU/A7v2/czigzOb+C2uSiFsa9lBUzeH7M1oK+Q+OLxL3kA==
 
 object-assign@^4.0.1, object-assign@^4.1.1:
   version "4.1.1"

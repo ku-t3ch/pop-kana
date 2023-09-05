@@ -1,5 +1,4 @@
 import React from "react";
-import styles from "@/styles/places-image.module.css";
 
 interface Props {
   facultyName: string;

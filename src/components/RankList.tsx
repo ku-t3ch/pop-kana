@@ -8,6 +8,17 @@ interface Props {
   recordsInit: DataInterface[];
 }
 
+function formatNumber(num: number): string {
+  if (num >= 1e6) {
+    const suffixes = ['', 'K', 'M', 'B', 'T', 'Q', 'QQ', 'S', 'SS', 'O', 'N', 'D'];
+
+    const suffixIndex = Math.floor(Math.log10(num) / 3);
+    const shortNum = (num / Math.pow(1000, suffixIndex)).toFixed(3);
+    return shortNum.replace(/\.0*$/, '') + suffixes[suffixIndex];
+  }
+  return num.toString();
+}
+
 const RankList: NextPage<Props> = ({ recordsInit }) => {
   const [Ranks, setRanks] = useState(recordsInit);
 
@@ -38,7 +49,7 @@ const RankList: NextPage<Props> = ({ recordsInit }) => {
           <tr key={id} style={{ color: rankColor(id + 1) }}>
             <td className="pr-10">{id + 1}.</td>
             <td className="pr-10">{e.faculty_name}</td>
-            <td>{e.count}</td>
+            <td>{formatNumber(e.count)}</td>
           </tr>
         ))}
       </tbody>
