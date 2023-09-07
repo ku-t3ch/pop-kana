@@ -1,5 +1,6 @@
 // type
 import type { DataInterface } from "@/interfaces/DataInterface";
+import type { EmojiInterface } from "@/interfaces/EmojiInterface";
 
 // commons
 import Image from "next/image";
@@ -7,17 +8,16 @@ import pb from "@/services/pocketbase";
 import NoSSR from "@/components/NoSSR";
 import tw from "tailwind-styled-components";
 import { useEffect, useRef, useState } from "react";
+import { randomNumber } from "@/utils/random";
 import { random as getEmoji } from "emoji-random-list";
 
 // assets
 import CatWow from "@/assets/cat-wow.png";
 import CatDefault from "@/assets/cat-default.png";
 import Background from "@/assets/background.png";
-import { randomNumber } from "@/utils/random";
-import { EmojiInterface } from "@/interfaces/EmojiInterface";
 
 // components
-// import Scoreboard from "@/components/Scoreboard";
+import Scoreboard from "@/components/Scoreboard";
 
 // rate update amount to database
 const sendPerCount = 7;
@@ -29,6 +29,7 @@ export default function Home() {
   const [score, setScore] = useState<number>(0);
   const [effects, setEffects] = useState<EmojiInterface[]>([]);
   const [isCatAction, setCatAction] = useState<boolean>(false);
+  const [isOpenScoreboard, setIsOpenScoreboard] = useState<boolean>(false);
 
   // set background
   useEffect(() => {
@@ -117,15 +118,15 @@ export default function Home() {
           <Effects.Container
             key={`effect-[${idx}]`}
             style={{
-              opacity: 0,
               top: `${effect.y}px`,
               left: `${effect.x}px`,
-              animation: "fadeIn 1s",
             }}
           >
             <Effects.Text
               style={{
                 color: effect.color,
+                opacity: 0,
+                animation: "fadeOut 3s",
               }}
             >
               {effect.value}
@@ -134,9 +135,18 @@ export default function Home() {
         );
       })}
 
-      {/* <div className="fixed bottom-0">
-        <Scoreboard />
-      </div> */}
+      <div
+        className="fixed left-1/2 -translate-x-1/2"
+        style={{
+          bottom: isOpenScoreboard ? "0rem" : "-36.25rem",
+          transition: "all .5s ease-in-out",
+        }}
+      >
+        <Scoreboard
+          isOpen={isOpenScoreboard}
+          openModal={() => setIsOpenScoreboard((isOpen) => !isOpen)}
+        />
+      </div>
 
       <Character.Container>
         <Image

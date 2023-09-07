@@ -18,8 +18,7 @@ body {
   100% { transform: translate(0, 0) rotate(0deg); }
 }
 
-@keyframes fadeIn {
-  0% { opacity: 0; }
-  50% { opacity: 1; }
+@keyframes fadeOut {
+  0% { opacity: 1; }
   100% { opacity: 0; }
 }
