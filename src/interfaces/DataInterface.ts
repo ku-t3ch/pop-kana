@@ -1,4 +1,5 @@
 export interface DataInterface {
+    target: any
     id: string
     collectionId: string
     collectionName: string

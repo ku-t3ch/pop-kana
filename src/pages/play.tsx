@@ -18,11 +18,16 @@ import Background from "@/assets/background.png";
 
 // components
 import Scoreboard from "@/components/Scoreboard";
+import { useEventListener, useLocalStorage } from "usehooks-ts";
+import { useRouter } from "next/router";
 
 // rate update amount to database
 const sendPerCount = 7;
 
 export default function Home() {
+  const [selectedFaculty, setSelectedFaculty] =
+    useLocalStorage<DataInterface | null>("faculty-id", null);
+  const { push } = useRouter();
   const stash = useRef<number>(0);
   const isDelay = useRef<boolean>(false);
 
@@ -31,12 +36,19 @@ export default function Home() {
   const [isCatAction, setCatAction] = useState<boolean>(false);
   const [isOpenScoreboard, setIsOpenScoreboard] = useState<boolean>(false);
 
+  useEffect(() => {
+    if (selectedFaculty === null) {
+      push("/");
+    }
+  }, [selectedFaculty]);
+
   // set background
   useEffect(() => {
     document.body.style.background = `url(${Background.src}) fixed bottom`;
   }, []);
 
   const handleClick: () => void = () => {
+    pb.autoCancellation(false);
     // delay
     if (isDelay.current) return;
     isDelay.current = true;
@@ -75,8 +87,8 @@ export default function Home() {
     if (stash.current == sendPerCount) {
       stash.current = 0;
       pb.collection("data")
-        .update<DataInterface>("vu7tba7w24ye4rq", {
-          "count+": 5,
+        .update<DataInterface>(selectedFaculty?.id!, {
+          "count+": 7,
         })
         .catch(() => {});
     }
@@ -99,10 +111,12 @@ export default function Home() {
     setEffects([]);
   }, [effects]);
 
+  useEventListener("keydown", handleClick);
+
   return (
     <NoSSR>
       <Navbar.Container>
-        <Navbar.Faculty>คณะวิทยาศาสตร์</Navbar.Faculty>
+        <Navbar.Faculty>{selectedFaculty?.faculty_name}</Navbar.Faculty>
         <Navbar.Score
           key={`score-[${score}]`}
           style={{

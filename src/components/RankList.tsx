@@ -3,20 +3,14 @@ import pb from "@/services/pocketbase";
 import { NextPage } from "next";
 import { useEffect, useState } from "react";
 import _ from "lodash";
+import CountUp from "react-countup";
 
 interface Props {
   recordsInit: DataInterface[];
 }
 
 function formatNumber(num: number): string {
-  if (num >= 1e6) {
-    const suffixes = ['', 'K', 'M', 'B', 'T', 'Q', 'QQ', 'S', 'SS', 'O', 'N', 'D'];
-
-    const suffixIndex = Math.floor(Math.log10(num) / 3);
-    const shortNum = (num / Math.pow(1000, suffixIndex)).toFixed(3);
-    return shortNum.replace(/\.0*$/, '') + suffixes[suffixIndex];
-  }
-  return num.toString();
+  return num.toLocaleString("th-TH");
 }
 
 const RankList: NextPage<Props> = ({ recordsInit }) => {
@@ -43,18 +37,25 @@ const RankList: NextPage<Props> = ({ recordsInit }) => {
 
   return (
     <div className="flex flex-col justify-evenly">
-    <table>
-      <tbody>
-        {Ranks?.map((e, id) => (
-          <tr key={id} style={{ color: rankColor(id + 1) }}>
-            <td className="pr-10">{id + 1}.</td>
-            <td className="pr-10">{e.faculty_name}</td>
-            <td>{formatNumber(e.count)}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
+      <table>
+        <tbody>
+          {_.orderBy(Ranks, ["count"], ["desc"])?.map((e, id) => (
+            <tr key={id} style={{ color: rankColor(id + 1) }}>
+              <td className="pr-10">{id + 1}.</td>
+              <td className="pr-10">{e.faculty_name}</td>
+              <td>
+                <CountUp
+                  start={e.count < 10 ? 0 : e.count - 10}
+                  end={e.count}
+                //   children={(value) => formatNumber(value.)}
+                duration={5}
+                />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 };
 
