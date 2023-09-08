@@ -53,7 +53,10 @@ const Scoreboard: FC<Props> = ({ isOpen = false, openModal, isPage }) => {
 
   return (
     <>
-      <Card.Main className={clsx(!isPage && "max-w-[30rem]")}>
+      <Card.Main className={clsx(!isPage && "max-w-[30rem]","relative")}>
+        <div className="absolute top-0 left-2 -translate-y-6 drop-shadow-lg text-white">
+            Made by KU Tech
+        </div>
         <Header.Main onClick={openModal} className="flex w-full justify-between ">
           <Icon className="text-[1.5rem]" icon="ic:round-leaderboard" />
           {isOpen ? (
