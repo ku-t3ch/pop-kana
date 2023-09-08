@@ -36,10 +36,6 @@ const Rank: NextPage<Props> = () => {
         }
         return item;
       });
-
-      console.log(newData);
-      
-
       setRanks(newData);
     });
   };
