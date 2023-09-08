@@ -11,6 +11,7 @@ interface Props {}
 
 const Index: NextPage<Props> = () => {
   const { push } = useRouter();
+  const [isLoading, setisLoading] = useState(true)
   const [Data, setData] = useState<DataInterface[]>([]);
   const [selectedFacultyLocal, setSelectedFacultyLocal] = useState<DataInterface>();
   const [selectedFaculty, setSelectedFaculty] = useLocalStorage<DataInterface | null>(
@@ -24,6 +25,7 @@ const Index: NextPage<Props> = () => {
       sort: "-created",
       fields: "faculty_name,id",
     });
+    setisLoading(false)
     setData(records);
     setSelectedFacultyLocal(records[0]);
   };
@@ -53,7 +55,7 @@ const Index: NextPage<Props> = () => {
       <div className="text-[5rem] md:text-[10rem] text-white drop-shadow-lg">POP KU</div>
       <div className="flex w-full max-w-lg flex-col gap-3">
         <div className="text-xl text-white drop-shadow-lg">เลือกคณะ</div>
-        <Select onChange={onChange} required>
+        <Select onChange={onChange} required disabled={isLoading}>
           {Data.map((e) => (
             <option key={e.id} value={e.id}>
               {e.faculty_name}
