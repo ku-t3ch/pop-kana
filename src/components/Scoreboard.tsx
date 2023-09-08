@@ -11,6 +11,8 @@ import { useLocalStorage } from "usehooks-ts";
 import { ArrowLeftRight } from "lucide-react";
 import Loading from "./Loading";
 import { AnimatePresence, motion } from "framer-motion";
+import numeral from "numeral";
+import { formatBigNumber } from "@/utils/formatBigNumber";
 
 interface Props {
   isOpen?: boolean;
@@ -86,7 +88,12 @@ const Scoreboard: FC<Props> = ({ isOpen = false, openModal, isPage }) => {
             <div>🏆 Scoreboard</div>
           ) : (
             <div className="flex gap-2">
-              <div>🥇 {_.orderBy(Ranks, ["count"], ["desc"])[0]?.faculty_name}</div>
+              <div className="flex items-center gap-2">
+                <h6>🥇 {_.orderBy(Ranks, ["count"], ["desc"])[0]?.faculty_name} </h6>
+                <div className="w-fit rounded-full bg-lime-500 p-1 text-sm text-white">
+                  {formatBigNumber(_.orderBy(Ranks, ["count"], ["desc"])[0]?.count as number)}
+                </div>
+              </div>
             </div>
           )}
 
@@ -99,7 +106,8 @@ const Scoreboard: FC<Props> = ({ isOpen = false, openModal, isPage }) => {
           {_.orderBy(Ranks, ["count"], ["desc"])?.map((data, idx) => {
             const tmpCount = tmpRanks.find((rank) => rank.id === data.id)?.count ?? 0;
             const diffCount = tmpCount - data.count;
-            console.log(diffCount);
+            const diffCountFormat = formatBigNumber(diffCount);
+
             return (
               <FacultyItem key={idx}>
                 <div className="w-[60vw]">
@@ -117,11 +125,15 @@ const Scoreboard: FC<Props> = ({ isOpen = false, openModal, isPage }) => {
                         }}
                         className="font-bold text-lime-500"
                       >
-                        +{diffCount} click{diffCount > 1 ? "s" : ""}
+                        +{diffCountFormat}
                       </motion.p>
                     )}
                   </AnimatePresence>
-                  <CountUp start={data.count} end={data.count + diffCount} />
+                  <CountUp
+                    start={data.count}
+                    end={data.count + diffCount}
+                    formattingFn={(value) => formatBigNumber(value)}
+                  />
                   click{data.count > 1 ? "s" : ""}
                 </div>
               </FacultyItem>
