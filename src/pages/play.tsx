@@ -7,7 +7,7 @@ import Image from "next/image";
 import pb from "@/services/pocketbase";
 import NoSSR from "@/components/NoSSR";
 import tw from "tailwind-styled-components";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { randomNumber } from "@/utils/random";
 import { random as getEmoji } from "emoji-random-list";
 import { Howl } from "howler";
@@ -19,11 +19,9 @@ import Background from "@/assets/background.png";
 
 // components
 import Scoreboard from "@/components/Scoreboard";
-import { useEventListener, useLocalStorage } from "usehooks-ts";
+import { useLocalStorage } from "usehooks-ts";
 import { useRouter } from "next/router";
-
-// rate update amount to database
-const sendPerCount = 7;
+import { debounce } from "lodash";
 
 export default function Home() {
   const [selectedFaculty, setSelectedFaculty] = useLocalStorage<DataInterface | null>(
@@ -45,72 +43,76 @@ export default function Home() {
     if (selectedFaculty === null) {
       push("/");
     }
-  }, [selectedFaculty]);
+  }, [selectedFaculty, push]);
 
   // set background
   useEffect(() => {
     document.body.style.background = `url(${Background.src}) fixed bottom`;
   }, []);
 
-  const handleClick: () => void = () => {
-    if (isBot.current) return;
-    // check
-    stashCheck.current += 1;
-
-    pb.autoCancellation(false);
-    // delay
-    if (isDelay.current) return;
-    isDelay.current = true;
-
-    // sound effect
-    const indexPOP = randomNumber(1, 4);
-    var sound = new Howl({
-      src: [`/pop${indexPOP}.ogg`],
-      html5: true,
-    });
-    sound.play();
-
-    // cat animation
-    const { innerWidth: width, innerHeight: height } = window;
-    const x = randomNumber(10, width - 50);
-    const y = randomNumber(150, height - 100);
-    const rgb = `rgb(${randomNumber(0, 255)}, ${randomNumber(0, 255)}, ${randomNumber(0, 255)})`;
-
-    setCatAction(true);
-    setEffects((p) => [
-      ...p,
-      {
-        x,
-        y,
-        color: rgb,
-        value: getEmoji({ n: 1, group: "Food & Drink" })[0],
-      },
-    ]);
-
-    // logic
-    setScore((p) => p + 1);
-    stash.current += 1;
-
-    if (stash.current == sendPerCount) {
-      stash.current = 0;
-      pb.collection("data")
-        .update<DataInterface>(selectedFaculty?.id!, {
-          "count+": 7,
-        })
-        .catch(() => {});
-    }
-
-    setTimeout(() => {
-      isDelay.current = false;
-      setCatAction(false);
-    }, 50);
-  };
+  const updateScore = useMemo(
+    () =>
+      debounce(async (count: number) => {
+        try {
+          await pb.collection("data").update<DataInterface>(selectedFaculty?.id!, {
+            "count+": count,
+          });
+          stash.current = 0;
+        } catch (err) {}
+      }, 1000),
+    [selectedFaculty?.id]
+  );
 
   useEffect(() => {
+    const handleClick: () => void = () => {
+      if (isBot.current) return;
+      // check
+      stashCheck.current += 1;
+
+      pb.autoCancellation(false);
+      // delay
+      if (isDelay.current) return;
+      isDelay.current = true;
+
+      // sound effect
+      const indexPOP = randomNumber(1, 4);
+      var sound = new Howl({
+        src: [`/pop${indexPOP}.ogg`],
+        html5: true,
+      });
+      sound.play();
+
+      // cat animation
+      const { innerWidth: width, innerHeight: height } = window;
+      const x = randomNumber(10, width - 50);
+      const y = randomNumber(150, height - 100);
+      const rgb = `rgb(${randomNumber(0, 255)}, ${randomNumber(0, 255)}, ${randomNumber(0, 255)})`;
+
+      setCatAction(true);
+      setEffects((p) => [
+        ...p,
+        {
+          x,
+          y,
+          color: rgb,
+          value: getEmoji({ n: 1, group: "Food & Drink" })[0],
+        },
+      ]);
+
+      // logic
+      setScore((p) => p + 1);
+      stash.current += 1;
+      updateScore(stash.current);
+
+      setTimeout(() => {
+        isDelay.current = false;
+        setCatAction(false);
+      }, 50);
+    };
     document.addEventListener("click", handleClick);
 
     return () => document.removeEventListener("click", handleClick);
-  }, []);
+  }, [selectedFaculty?.id, updateScore]);
 
   useEffect(() => {
     if (effects.length < 10) return;
