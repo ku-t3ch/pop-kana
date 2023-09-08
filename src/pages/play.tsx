@@ -32,7 +32,9 @@ export default function Home() {
   );
   const { push } = useRouter();
   const stash = useRef<number>(0);
+  const stashCheck = useRef<number>(0);
   const isDelay = useRef<boolean>(false);
+  const isBot = useRef<boolean>(false);
 
   const [score, setScore] = useState<number>(0);
   const [effects, setEffects] = useState<EmojiInterface[]>([]);
@@ -44,7 +46,6 @@ export default function Home() {
       push("/");
     }
   }, [selectedFaculty]);
-  
 
   // set background
   useEffect(() => {
@@ -52,6 +53,10 @@ export default function Home() {
   }, []);
 
   const handleClick: () => void = () => {
+    if (isBot.current) return;
+    // check
+    stashCheck.current += 1;
+
     pb.autoCancellation(false);
     // delay
     if (isDelay.current) return;
@@ -113,11 +118,16 @@ export default function Home() {
     setEffects([]);
   }, [effects]);
 
-  useEventListener("keydown", handleClick);
+  //   useEventListener("keydown", handleClick);
 
-  const getClickPerSecond = () => {
-    // get click per second 
-  }
+  useEffect(() => {
+    setInterval(() => {
+      if (stashCheck.current > 15) {
+        isBot.current = true;
+      }
+      stashCheck.current = 0;
+    }, 1000);
+  }, []);
 
   return (
     <NoSSR>
