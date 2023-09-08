@@ -10,6 +10,7 @@ import tw from "tailwind-styled-components";
 import { useEffect, useRef, useState } from "react";
 import { randomNumber } from "@/utils/random";
 import { random as getEmoji } from "emoji-random-list";
+import { Howl } from "howler";
 
 // assets
 import CatWow from "@/assets/cat-wow.png";
@@ -25,8 +26,10 @@ import { useRouter } from "next/router";
 const sendPerCount = 7;
 
 export default function Home() {
-  const [selectedFaculty, setSelectedFaculty] =
-    useLocalStorage<DataInterface | null>("faculty-id", null);
+  const [selectedFaculty, setSelectedFaculty] = useLocalStorage<DataInterface | null>(
+    "faculty-id",
+    null
+  );
   const { push } = useRouter();
   const stash = useRef<number>(0);
   const isDelay = useRef<boolean>(false);
@@ -54,20 +57,18 @@ export default function Home() {
     isDelay.current = true;
 
     // sound effect
-    const audio = new Audio("/pop.mp3");
-
-    audio.playbackRate = 3;
-    audio.volume = 0.5;
-    audio.play();
+    const indexPOP = randomNumber(1, 4);
+    var sound = new Howl({
+      src: [`/pop${indexPOP}.ogg`],
+      html5: true,
+    });
+    sound.play();
 
     // cat animation
     const { innerWidth: width, innerHeight: height } = window;
     const x = randomNumber(10, width - 50);
     const y = randomNumber(150, height - 100);
-    const rgb = `rgb(${randomNumber(0, 255)}, ${randomNumber(
-      0,
-      255
-    )}, ${randomNumber(0, 255)})`;
+    const rgb = `rgb(${randomNumber(0, 255)}, ${randomNumber(0, 255)}, ${randomNumber(0, 255)})`;
 
     setCatAction(true);
     setEffects((p) => [

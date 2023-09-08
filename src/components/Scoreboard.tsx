@@ -8,14 +8,14 @@ import tw from "tailwind-styled-components";
 import CountUp from "react-countup";
 import _ from "lodash";
 import { useLocalStorage } from "usehooks-ts";
-
+import { ArrowLeftRight } from "lucide-react";
 interface Props {
   isOpen?: boolean;
   openModal?: () => void;
   isPage?: boolean;
 }
 
-const Scoreboard: FC<Props> = ({ isOpen = false, openModal,isPage }) => {
+const Scoreboard: FC<Props> = ({ isOpen = false, openModal, isPage }) => {
   const [Ranks, setRanks] = useState<DataInterface[]>();
   const [selectedFaculty, setSelectedFaculty] = useLocalStorage<DataInterface | null>(
     "faculty-id",
@@ -59,9 +59,7 @@ const Scoreboard: FC<Props> = ({ isOpen = false, openModal,isPage }) => {
             <div>Scoreboard</div>
           </Header.Title>
           <Header.Icon className="w-[50vw]">
-            <Icon
-              icon={isOpen ? "iconamoon:arrow-down-2" : "iconamoon:arrow-up-2"}
-            />
+            <Icon icon={isOpen ? "iconamoon:arrow-down-2" : "iconamoon:arrow-up-2"} />
           </Header.Icon>
         </Header.Main>
         <Card.Body>
@@ -72,61 +70,61 @@ const Scoreboard: FC<Props> = ({ isOpen = false, openModal,isPage }) => {
                   {idx + 1}. {data.faculty_name}
                 </div>
                 <div className="w-[40vw] text-end">
-                  <CountUp
-                    start={data.count < 10 ? 0 : data.count - 10}
-                    end={data.count}
-                  />{" "}
-                  click
+                  <CountUp start={data.count < 10 ? 0 : data.count - 10} end={data.count} /> click
                 </div>
               </FacultyItem>
             );
           })}
         </Card.Body>
       </Card.Main>
-      {!isPage &&  <button onClick={()=>setSelectedFaculty(null)} className="w-full bg-blue-500 hover:bg-blue-600 py-[.5rem] text-white cursor-pointer">
-        เปลี่ยนคณะ
-      </button>}
-     
+      {!isPage && (
+        <button
+          onClick={() => setSelectedFaculty(null)}
+          className="w-full cursor-pointer bg-blue-500 py-[.5rem] text-white hover:bg-blue-600 flex justify-center gap-3 items-center"
+        >
+          <ArrowLeftRight size={20} /> เปลี่ยนคณะ
+        </button>
+      )}
     </>
   );
 };
 
 const Card = {
-    Main: tw.div`
+  Main: tw.div`
       w-[100vw]
       bg-white
       rounded-t-[.5rem]
       px-[1rem]
       text-[.9rem]
     `,
-    Body: tw.div`
+  Body: tw.div`
       max-h-[40rem]
       overflow-y-auto
     `,
-  };
-  
-  const Header = {
-    Main: tw.div`
+};
+
+const Header = {
+  Main: tw.div`
       border-b
       py-[.85rem]
       flex
       text-bold
       text-[1rem]
     `,
-    Title: tw.div`
+  Title: tw.div`
       flex
       gap-1
       items-center
     `,
-    Icon: tw.div`
+  Icon: tw.div`
       text-[1.5rem]
       flex
       items-center
       justify-end
     `,
-  };
-  
-  const FacultyItem = tw.div`
+};
+
+const FacultyItem = tw.div`
     flex
     py-[.5rem]
     border-b

@@ -6,6 +6,7 @@ import { Label, Select, Button } from "flowbite-react";
 import { useRouter } from "next/router";
 import { useLocalStorage } from "usehooks-ts";
 import Background from "@/assets/background.png";
+import { Gamepad } from 'lucide-react';
 
 interface Props {}
 
@@ -62,7 +63,7 @@ const Index: NextPage<Props> = () => {
             </option>
           ))}
         </Select>
-        <Button onClick={onSubmit}>เล่น</Button>
+        <Button onClick={onSubmit}><Gamepad className="mr-2" /> เล่น</Button>
       </div>
     </div>
   );
