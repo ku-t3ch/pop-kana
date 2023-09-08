@@ -8,7 +8,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
   useEffect(() => {
     console.log("%cอย่านะครับถือว่าผมขอ", "font-size:5em;color:red;");
     console.log(
-      `%c อยากใช้ bot เลยนะครับขอร้อง`,
+      `%c อย่าใช้ bot เลยนะครับขอร้อง`,
       "font-size:2em"
     );
   }, []);
