@@ -10,7 +10,7 @@ import _ from "lodash";
 import { useLocalStorage } from "usehooks-ts";
 import { ArrowLeftRight } from "lucide-react";
 import Loading from "./Loading";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
 interface Props {
   isOpen?: boolean;
@@ -60,7 +60,7 @@ const Scoreboard: FC<Props> = ({ isOpen = false, openModal, isPage }) => {
   useEffect(() => {
     setTimeout(() => {
       setRanks(tmpRanks);
-    }, 1000);
+    }, 1500);
   }, [tmpRanks]);
 
   const checkApiUrlChange = (records: DataInterface[]) => {
@@ -106,15 +106,21 @@ const Scoreboard: FC<Props> = ({ isOpen = false, openModal, isPage }) => {
                   {idx + 1}. {data.faculty_name}
                 </div>
                 <div className="flex w-[40vw] justify-end gap-1 text-end">
-                  <motion.p
-                    animate={{
-                      opacity: diffCount > 0 ? 1 : 0,
-                      display: diffCount > 0 ? "block" : "none",
-                    }}
-                    className="font-bold text-lime-500"
-                  >
-                    +{diffCount} click{diffCount > 1 ? "s" : ""}
-                  </motion.p>
+                  <AnimatePresence>
+                    {diffCount > 0 && (
+                      <motion.p
+                        animate={{
+                          opacity: [0, 1],
+                        }}
+                        exit={{
+                          opacity: [1, 0],
+                        }}
+                        className="font-bold text-lime-500"
+                      >
+                        +{diffCount} click{diffCount > 1 ? "s" : ""}
+                      </motion.p>
+                    )}
+                  </AnimatePresence>
                   <CountUp start={data.count} end={data.count + diffCount} />
                   click{data.count > 1 ? "s" : ""}
                 </div>
