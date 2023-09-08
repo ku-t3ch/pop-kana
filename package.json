@@ -10,6 +10,7 @@
     "seed": "ts-node seed.ts"
   },
   "dependencies": {
+    "@emotion/css": "^11.11.2",
     "@headlessui/react": "^1.7.17",
     "@t3-oss/env-nextjs": "^0.3.1",
     "@types/howler": "^2.2.8",

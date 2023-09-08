@@ -9,6 +9,7 @@ import CountUp from "react-countup";
 import _ from "lodash";
 import { useLocalStorage } from "usehooks-ts";
 import { ArrowLeftRight } from "lucide-react";
+import Loading from "./Loading";
 interface Props {
   isOpen?: boolean;
   openModal?: () => void;
@@ -53,14 +54,20 @@ const Scoreboard: FC<Props> = ({ isOpen = false, openModal, isPage }) => {
   return (
     <>
       <Card.Main className={clsx(!isPage && "max-w-[30rem]")}>
-        <Header.Main onClick={openModal}>
-          <Header.Title className="w-[50vw]">
-            <Icon icon="ic:round-leaderboard" />
-            <div>Scoreboard</div>
-          </Header.Title>
-          <Header.Icon className="w-[50vw]">
-            <Icon icon={isOpen ? "iconamoon:arrow-down-2" : "iconamoon:arrow-up-2"} />
-          </Header.Icon>
+        <Header.Main onClick={openModal} className="flex w-full justify-between ">
+          <Icon className="text-[1.5rem]" icon="ic:round-leaderboard" />
+          {isOpen ? (
+            <div>🏆 Scoreboard</div>
+          ) : (
+            <div className="flex gap-2">
+              <div>🥇 {(_.orderBy(Ranks, ["count"], ["desc"]))[0]?.faculty_name}</div>
+            </div>
+          )}
+
+          <Icon
+            className="text-[1.5rem]"
+            icon={isOpen ? "iconamoon:arrow-down-2" : "iconamoon:arrow-up-2"}
+          />
         </Header.Main>
         <Card.Body>
           {_.orderBy(Ranks, ["count"], ["desc"])?.map((data, idx) => {
@@ -80,7 +87,7 @@ const Scoreboard: FC<Props> = ({ isOpen = false, openModal, isPage }) => {
       {!isPage && (
         <button
           onClick={() => setSelectedFaculty(null)}
-          className="w-full cursor-pointer bg-blue-500 py-[.5rem] text-white hover:bg-blue-600 flex justify-center gap-3 items-center"
+          className="flex w-full cursor-pointer items-center justify-center gap-3 bg-blue-500 py-[.5rem] text-white hover:bg-blue-600"
         >
           <ArrowLeftRight size={20} /> เปลี่ยนคณะ
         </button>
@@ -96,6 +103,7 @@ const Card = {
       rounded-t-[.5rem]
       px-[1rem]
       text-[.9rem]
+      drop-shadow-lg
     `,
   Body: tw.div`
       max-h-[40rem]

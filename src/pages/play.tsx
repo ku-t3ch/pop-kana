@@ -44,6 +44,7 @@ export default function Home() {
       push("/");
     }
   }, [selectedFaculty]);
+  
 
   // set background
   useEffect(() => {
@@ -114,6 +115,10 @@ export default function Home() {
 
   useEventListener("keydown", handleClick);
 
+  const getClickPerSecond = () => {
+    // get click per second 
+  }
+
   return (
     <NoSSR>
       <Navbar.Container>
@@ -153,8 +158,8 @@ export default function Home() {
       <div
         className="fixed left-1/2 -translate-x-1/2"
         style={{
-          bottom: isOpenScoreboard ? "0rem" : "-36.25rem",
-          transition: "all .5s ease-in-out",
+          bottom: isOpenScoreboard ? "0rem" : "-39rem",
+          transition: "all .5s cubic-bezier(0.83, 0.02, 0.29, 0.98) 0s",
         }}
       >
         <Scoreboard

@@ -4,6 +4,7 @@ import { NextPage } from 'next'
 import { useEffect, useState } from 'react';
 import RankList from '@/components/RankList';
 import Scoreboard from '@/components/Scoreboard';
+import Loading from '@/components/Loading';
 
 interface Props {}
 
@@ -22,7 +23,7 @@ const Rank2: NextPage<Props> = () => {
       setRanks(records);
     };
   
-    if (!Ranks) return <div>loading</div>;
+    if (!Ranks) return  <Loading />;
 
     return (
         <>

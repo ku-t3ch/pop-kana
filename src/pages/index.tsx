@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import { useLocalStorage } from "usehooks-ts";
 import Background from "@/assets/background.png";
 import { Gamepad } from 'lucide-react';
+import Loading from "@/components/Loading";
 
 interface Props {}
 
@@ -50,6 +51,8 @@ const Index: NextPage<Props> = () => {
       push("/play");
     }
   }, [selectedFaculty]);
+
+  if (isLoading) return <Loading />
 
   return (
     <div className="flex h-screen flex-col items-center justify-center px-5">
