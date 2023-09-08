@@ -10,6 +10,8 @@ import _ from "lodash";
 import { useLocalStorage } from "usehooks-ts";
 import { ArrowLeftRight } from "lucide-react";
 import Loading from "./Loading";
+import { motion } from "framer-motion";
+
 interface Props {
   isOpen?: boolean;
   openModal?: () => void;
@@ -17,7 +19,9 @@ interface Props {
 }
 
 const Scoreboard: FC<Props> = ({ isOpen = false, openModal, isPage }) => {
+  const [tmpRanks, setTmpRanks] = useState<DataInterface[]>([]);
   const [Ranks, setRanks] = useState<DataInterface[]>();
+  const hasNewData = Ranks?.length !== 0;
   const [selectedFaculty, setSelectedFaculty] = useLocalStorage<DataInterface | null>(
     "faculty-id",
     null
@@ -38,7 +42,7 @@ const Scoreboard: FC<Props> = ({ isOpen = false, openModal, isPage }) => {
     checkApiUrlChange(records);
 
     // set init data
-    setRanks(records);
+    setTmpRanks(records);
 
     // setup sync data
     pb.collection("data").subscribe<DataInterface>("*", function (e) {
@@ -49,17 +53,26 @@ const Scoreboard: FC<Props> = ({ isOpen = false, openModal, isPage }) => {
         return item;
       });
 
-      setRanks(newData);
+      setTmpRanks(newData);
     });
   };
 
-  const checkApiUrlChange = (records:DataInterface[]) => {
+  useEffect(() => {
+    setTimeout(() => {
+      setRanks(tmpRanks);
+    }, 1000);
+  }, [tmpRanks]);
+
+  const checkApiUrlChange = (records: DataInterface[]) => {
     if (!selectedFaculty) return;
-    let result = records.find((item) => item.faculty_name === selectedFaculty?.faculty_name && item.id === selectedFaculty?.id);
+    let result = records.find(
+      (item) =>
+        item.faculty_name === selectedFaculty?.faculty_name && item.id === selectedFaculty?.id
+    );
     if (!result) {
       setSelectedFaculty(null);
     }
-  }
+  };
 
   return (
     <>
@@ -84,13 +97,26 @@ const Scoreboard: FC<Props> = ({ isOpen = false, openModal, isPage }) => {
         </Header.Main>
         <Card.Body>
           {_.orderBy(Ranks, ["count"], ["desc"])?.map((data, idx) => {
+            const tmpCount = tmpRanks.find((rank) => rank.id === data.id)?.count ?? 0;
+            const diffCount = tmpCount - data.count;
+            console.log(diffCount);
             return (
               <FacultyItem key={idx}>
                 <div className="w-[60vw]">
                   {idx + 1}. {data.faculty_name}
                 </div>
-                <div className="w-[40vw] text-end">
-                  <CountUp start={data.count < 10 ? 0 : data.count - 10} end={data.count} /> click
+                <div className="flex w-[40vw] justify-end gap-1 text-end">
+                  <motion.p
+                    animate={{
+                      opacity: diffCount > 0 ? 1 : 0,
+                      display: diffCount > 0 ? "block" : "none",
+                    }}
+                    className="font-bold text-lime-500"
+                  >
+                    +{diffCount} click{diffCount > 1 ? "s" : ""}
+                  </motion.p>
+                  <CountUp start={data.count} end={data.count + diffCount} />
+                  click{data.count > 1 ? "s" : ""}
                 </div>
               </FacultyItem>
             );
