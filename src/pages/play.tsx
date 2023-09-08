@@ -4,14 +4,13 @@ import type { EmojiInterface } from "@/interfaces/EmojiInterface";
 
 // commons
 import Image from "next/image";
-import pb from "@/services/pocketbase";
 import NoSSR from "@/components/NoSSR";
 import tw from "tailwind-styled-components";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { randomNumber } from "@/utils/random";
 import { random as getEmoji } from "emoji-random-list";
 import { Howl } from "howler";
-
+import axios from "axios";
 // assets
 import CatWow from "@/assets/cat-wow.png";
 import CatDefault from "@/assets/cat-default.png";
@@ -54,9 +53,11 @@ export default function Home() {
     () =>
       debounce(async (count: number) => {
         try {
-          await pb.collection("data").update<DataInterface>(selectedFaculty?.id!, {
-            "count+": count,
+          await axios.post("/api/send", {
+            count,
+            facultyId: selectedFaculty?.id,
           });
+
           stash.current = 0;
         } catch (err) {}
       }, 1000),
@@ -69,7 +70,6 @@ export default function Home() {
       // check
       stashCheck.current += 1;
 
-      pb.autoCancellation(false);
       // delay
       if (isDelay.current) return;
       isDelay.current = true;
