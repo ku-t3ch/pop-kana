@@ -35,6 +35,8 @@ const Scoreboard: FC<Props> = ({ isOpen = false, openModal, isPage }) => {
       sort: "-count",
     });
 
+    checkApiUrlChange(records);
+
     // set init data
     setRanks(records);
 
@@ -51,11 +53,19 @@ const Scoreboard: FC<Props> = ({ isOpen = false, openModal, isPage }) => {
     });
   };
 
+  const checkApiUrlChange = (records:DataInterface[]) => {
+    if (!selectedFaculty) return;
+    let result = records.find((item) => item.faculty_name === selectedFaculty?.faculty_name && item.id === selectedFaculty?.id);
+    if (!result) {
+      setSelectedFaculty(null);
+    }
+  }
+
   return (
     <>
-      <Card.Main className={clsx(!isPage && "max-w-[30rem]","relative")}>
-        <div className="absolute top-0 left-2 -translate-y-6 drop-shadow-lg text-white">
-            Made by KU Tech
+      <Card.Main className={clsx(!isPage && "max-w-[30rem]", "relative")}>
+        <div className="absolute left-2 top-0 -translate-y-6 text-white drop-shadow-lg">
+          Made by KU Tech
         </div>
         <Header.Main onClick={openModal} className="flex w-full justify-between ">
           <Icon className="text-[1.5rem]" icon="ic:round-leaderboard" />
@@ -63,7 +73,7 @@ const Scoreboard: FC<Props> = ({ isOpen = false, openModal, isPage }) => {
             <div>🏆 Scoreboard</div>
           ) : (
             <div className="flex gap-2">
-              <div>🥇 {(_.orderBy(Ranks, ["count"], ["desc"]))[0]?.faculty_name}</div>
+              <div>🥇 {_.orderBy(Ranks, ["count"], ["desc"])[0]?.faculty_name}</div>
             </div>
           )}
 
