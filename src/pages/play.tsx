@@ -13,6 +13,8 @@ import { Howl } from "howler";
 import axios from "axios";
 // assets
 import Background from "@/assets/background.png";
+import CatWow from "@/assets/cat-wow.png";
+import CatDefault from "@/assets/cat-default.png";
 
 // components
 import Scoreboard from "@/components/Scoreboard";
@@ -179,8 +181,8 @@ export default function Home() {
       </div>
 
       <Character.Container>
-        <Image
-          src={isCatAction ? "/assets/cat-wow.png" : "/assets/cat-default.png"}
+        <img
+          src={isCatAction ? CatWow.src : CatDefault.src}
           width={200}
           height={200}
           style={{
