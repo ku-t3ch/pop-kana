@@ -182,7 +182,7 @@ export default function Home() {
 
       <Character.Container>
         <img
-          src={isCatAction ? "/assets/cat-default.png" : "/assets/cat-wow.png"}
+          src={isCatAction ? "/assets/cat-wow.png" : "/assets/cat-default.png"}
           width={200}
           height={200}
           style={{
