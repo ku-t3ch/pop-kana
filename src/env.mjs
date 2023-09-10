@@ -9,6 +9,8 @@ export const env = createEnv({
   server: {
     NODE_ENV: z.enum(["development", "test", "production"]),
     NEXT_PUBLIC_POCKETBASE_URL: z.string().url(),
+    POCKETBASE_EMAIL: z.string().email(),
+    POCKETBASE_PASSWORD: z.string().min(8),
   },
 
   /**
@@ -28,6 +30,8 @@ export const env = createEnv({
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
     NEXT_PUBLIC_POCKETBASE_URL: process.env.NEXT_PUBLIC_POCKETBASE_URL,
+    POCKETBASE_EMAIL: process.env.POCKETBASE_EMAIL,
+    POCKETBASE_PASSWORD: process.env.POCKETBASE_PASSWORD,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**

@@ -9,9 +9,7 @@ import CountUp from "react-countup";
 import _ from "lodash";
 import { useLocalStorage } from "usehooks-ts";
 import { ArrowLeftRight } from "lucide-react";
-import Loading from "./Loading";
 import { AnimatePresence, motion } from "framer-motion";
-import numeral from "numeral";
 import { formatBigNumber } from "@/utils/formatBigNumber";
 
 interface Props {
@@ -109,11 +107,14 @@ const Scoreboard: FC<Props> = ({ isOpen = false, openModal, isPage }) => {
             const diffCountFormat = formatBigNumber(diffCount);
 
             return (
-              <FacultyItem key={idx}>
+              <FacultyItem
+                key={idx}
+                className={clsx("px-2 duration-75", diffCount > 0 && "bg-green-400 text-white")}
+              >
                 <div className="w-[60vw]">
                   {idx + 1}. {data.faculty_name}
                 </div>
-                <div className="flex w-[40vw] justify-end gap-1 text-end">
+                <div className="flex w-[40vw] justify-end gap-1 text-end ">
                   <AnimatePresence>
                     {diffCount > 0 && (
                       <motion.p
@@ -123,7 +124,7 @@ const Scoreboard: FC<Props> = ({ isOpen = false, openModal, isPage }) => {
                         exit={{
                           opacity: [1, 0],
                         }}
-                        className="font-bold text-lime-500"
+                        className="font-bold "
                       >
                         +{diffCountFormat}
                       </motion.p>
