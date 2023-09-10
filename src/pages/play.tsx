@@ -12,8 +12,6 @@ import { random as getEmoji } from "emoji-random-list";
 import { Howl } from "howler";
 import axios from "axios";
 // assets
-import CatWow from "@/assets/cat-wow.png";
-import CatDefault from "@/assets/cat-default.png";
 import Background from "@/assets/background.png";
 
 // components
@@ -182,11 +180,14 @@ export default function Home() {
 
       <Character.Container>
         <Image
-          src={isCatAction ? CatWow : CatDefault}
-          width={0}
-          height={0}
+          src={isCatAction ? "/assets/cat-wow.png" : "/assets/cat-default.png"}
+          width={200}
+          height={200}
           style={{
             width: "auto",
+            height: "80vh",
+            objectFit: "contain",
+            objectPosition: "bottom",
           }}
           alt={"cat"}
         />
