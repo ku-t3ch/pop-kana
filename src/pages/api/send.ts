@@ -7,15 +7,15 @@ import { env } from "@/env.mjs";
 import rateLimit from "@/utils/rate-limit";
 
 const limiter = rateLimit({
-    interval: 5 * 1000, // 60 seconds
-    uniqueTokenPerInterval: 500, // Max 500 users per second
-  })
+  interval: 5 * 1000, // 60 seconds
+  uniqueTokenPerInterval: 500, // Max 500 users per second
+});
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { body, method } = req;
 
   try {
-    await limiter.check(res, 4, 'CACHE_TOKEN')
+    await limiter.check(res, 4, "CACHE_TOKEN");
   } catch (error) {
     return res.status(429).json({ message: "Too Many Requests" });
   }
@@ -25,6 +25,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   const { count, facultyId } = body;
+
+  if (count > 1300) {
+    return res.status(400).json({ message: "hmmmm!" });
+  }
 
   try {
     await pb.admins.authWithPassword(env.POCKETBASE_EMAIL, env.POCKETBASE_PASSWORD);

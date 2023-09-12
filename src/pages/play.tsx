@@ -127,7 +127,7 @@ export default function Home() {
 
   useEffect(() => {
     setInterval(() => {
-      if (stashCheck.current > 15) {
+      if (stashCheck.current > 13) {
         isBot.current = true;
       }
       stashCheck.current = 0;
