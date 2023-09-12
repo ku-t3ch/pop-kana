@@ -146,7 +146,7 @@ export default function Home() {
 
   useEffect(() => {
     let keyInterval = setInterval(() => {
-      if (stashCheck.current > 14) {
+      if (stashCheck.current > 15) {
         isBot.current = true;
         clearInterval(keyInterval);
       }
@@ -161,12 +161,12 @@ export default function Home() {
     let listCount: number[] = [];
 
     let keyInterval = setInterval(() => {
-      if (listCount.length === 7 && _.uniq(listCount).length < 3) {
+      if (listCount.length === 8 && _.uniq(listCount).length < 3) {
         isBot.current = true;
         clearInterval(keyInterval);
       }
 
-      if (listCount.length >= 7) {
+      if (listCount.length >= 8) {
         let first = listCount[0];
         let isBotCheck = 0;
         listCount.map((count) => {
