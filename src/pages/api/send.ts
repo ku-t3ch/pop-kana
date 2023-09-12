@@ -27,22 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    if (count >= 80 && count <= 99) {
-    //   console.log(`${detectedIp}-CACHE_TOKEN_1`);
-      await limiter.check(res, 2, `${detectedIp}-CACHE_TOKEN_1`);
-    } else if (count >= 60 && count < 79) {
-    //   console.log(`${detectedIp}-CACHE_TOKEN_2`);
-      await limiter.check(res, 3, `${detectedIp}-CACHE_TOKEN_2`);
-    } else if (count >= 40 && count < 59) {
-    //   console.log(`${detectedIp}-CACHE_TOKEN_3`);
-      await limiter.check(res, 4, `${detectedIp}-CACHE_TOKEN_3`);
-    } else if (count >= 20 && count < 39) {
-    //   console.log(`${detectedIp}-CACHE_TOKEN_4`);
-      await limiter.check(res, 4, `${detectedIp}-CACHE_TOKEN_4`);
-    } else if (count >= 0 && count < 19) {
-    //   console.log(`${detectedIp}-CACHE_TOKEN_5`);
-      await limiter.check(res, 5, `${detectedIp}-CACHE_TOKEN_5`);
-    }
+    await limiter.check(res, 5, `${detectedIp}-CACHE_TOKEN_1`);
   } catch (error) {
     return res.status(429).json({ message: "Too Many Requests" });
   }
@@ -53,8 +38,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       "count+": count,
     });
   } catch (err) {
-    res.status(500).json({ message: "Something went wrong!" });
+    return res.status(500).json({ message: "Something went wrong!" });
   }
 
-  res.status(200).json({ message: `success` });
+  return res.status(200).json({ message: `success` });
 }

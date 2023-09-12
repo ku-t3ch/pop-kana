@@ -17,7 +17,7 @@ import Background from "@/assets/background.png";
 import Scoreboard from "@/components/Scoreboard";
 import { useLocalStorage } from "usehooks-ts";
 import { useRouter } from "next/router";
-import { debounce } from "lodash";
+import { debounce, set } from "lodash";
 import { CatDefault, CatWow } from "@/assets/catImage";
 import _ from "lodash";
 
@@ -29,25 +29,32 @@ export default function Home() {
   const { push } = useRouter();
   const stash = useRef<number>(0);
   const stashCheck = useRef<number>(0);
-  const stashCheck2 = useRef<number>(0);
-  const isDelay = useRef<boolean>(false);
   const isBot = useRef<boolean>(false);
-  const isBotClick = useRef<boolean>(false);
+  const popList = useRef<Howl[]>();
 
   const [score, setScore] = useState<number>(0);
   const [effects, setEffects] = useState<EmojiInterface[]>([]);
   const [isCatAction, setCatAction] = useState<boolean>(false);
   const [isOpenScoreboard, setIsOpenScoreboard] = useState<boolean>(false);
+  const [Test, setTest] = useState(0);
 
   useEffect(() => {
     if (selectedFaculty === null) {
       push("/");
     }
-  }, [selectedFaculty, push]);
+  }, [selectedFaculty]);
 
   // set background
   useEffect(() => {
     document.body.style.background = `url(${Background.src}) fixed bottom`;
+    let audioList: Howl[] = [];
+    [1, 2, 3, 4].forEach((i) => {
+      const sound = new Howl({
+        src: [`/pop${i}.ogg`],
+      });
+      audioList.push(sound);
+    });
+    popList.current = audioList;
   }, []);
 
   const updateScore = useMemo(
@@ -77,85 +84,78 @@ export default function Home() {
     [selectedFaculty?.id]
   );
 
+  const emojiTigger = () => {
+    const { innerWidth: width, innerHeight: height } = window;
+    const x = randomNumber(10, width - 50);
+    const y = randomNumber(150, height - 100);
+    const rgb = `rgb(${randomNumber(0, 255)}, ${randomNumber(0, 255)}, ${randomNumber(0, 255)})`;
+
+    setCatAction(true);
+    setEffects((p) => [
+      ...p,
+      {
+        x,
+        y,
+        color: rgb,
+        value: getEmoji({ n: 1, group: "Food & Drink" })[0],
+      },
+    ]);
+  };
+
+  const onPop = () => {
+    if (isBot.current) return;
+    setScore((p) => p + 1);
+    stash.current += 1;
+    stashCheck.current += 1;
+
+    emojiTigger();
+    // sound effect
+    const indexPOP = randomNumber(0, 3);
+    if (popList.current) {
+      popList.current[indexPOP]?.play();
+    }
+
+    if (stash.current >= 99) {
+      console.log("add event");
+      updateScoreDefault(stash.current);
+    } else {
+      updateScore(stash.current);
+    }
+  };
+
   useEffect(() => {
-    const handleClick: () => void = () => {
-      if (isBot.current) return;
-      // check
-      stashCheck.current += 1;
-      stashCheck2.current += 1;
-
-      // delay
-      if (isDelay.current) return;
-      isDelay.current = true;
-
-      // sound effect
-      const indexPOP = randomNumber(1, 4);
-      var sound = new Howl({
-        src: [`/pop${indexPOP}.ogg`],
-        html5: true,
-      });
-      sound.play();
-      sound.once("end", () => {
-        sound.unload();
-      });
-
-      // cat animation
-      const { innerWidth: width, innerHeight: height } = window;
-      const x = randomNumber(10, width - 50);
-      const y = randomNumber(150, height - 100);
-      const rgb = `rgb(${randomNumber(0, 255)}, ${randomNumber(0, 255)}, ${randomNumber(0, 255)})`;
-
+    document.addEventListener("pointerdown", () => {
       setCatAction(true);
-      setEffects((p) => [
-        ...p,
-        {
-          x,
-          y,
-          color: rgb,
-          value: getEmoji({ n: 1, group: "Food & Drink" })[0],
-        },
-      ]);
-
-      // logic
-      setScore((p) => p + 1);
-      stash.current += 1;
-
-      if (stash.current >= 99) {
-        updateScoreDefault(stash.current);
-      } else {
-        updateScore(stash.current);
-      }
-
+      onPop();
+    });
+    document.addEventListener("keydown", () => {
+      setCatAction(true);
+      onPop();
+    });
+    document.addEventListener("pointerup", () => {
       setTimeout(() => {
-        isDelay.current = false;
         setCatAction(false);
-      }, 50);
-    };
-    document.addEventListener("click", handleClick);
+      }, 25);
+    });
+    document.addEventListener("keyup", () => {
+      setTimeout(() => {
+        setCatAction(false);
+      }, 25);
+    });
 
-    return () => document.removeEventListener("click", handleClick);
-  }, [selectedFaculty?.id]);
+    return () => {
+      document.removeEventListener("pointerdown", () => {});
+      document.removeEventListener("pointerup", () => {});
+      document.removeEventListener("keydown", () => {});
+      document.removeEventListener("keyup", () => {});
+    };
+  }, []);
 
   useEffect(() => {
     if (effects.length < 10) return;
 
     setEffects([]);
   }, [effects]);
-
-  //   useEventListener("keydown", handleClick);
-
-  useEffect(() => {
-    let keyInterval = setInterval(() => {
-      if (stashCheck.current > 15) {
-        isBot.current = true;
-        clearInterval(keyInterval);
-      }
-      stashCheck.current = 0;
-    }, 1000);
-    return () => {
-      clearInterval(keyInterval);
-    };
-  }, []);
 
   useEffect(() => {
     let listCount: number[] = [];
@@ -181,9 +181,9 @@ export default function Home() {
         }
         listCount = [];
       }
-      if (stashCheck2.current > 0) {
-        listCount.push(stashCheck2.current);
-        stashCheck2.current = 0;
+      if (stashCheck.current > 0) {
+        listCount.push(stashCheck.current);
+        stashCheck.current = 0;
       }
     }, 1000);
     return () => {
@@ -192,69 +192,71 @@ export default function Home() {
   }, []);
 
   return (
-    <NoSSR>
-      <Navbar.Container>
-        <Navbar.Faculty>{selectedFaculty?.faculty_name}</Navbar.Faculty>
-        <Navbar.Score
-          key={`score-[${score}]`}
-          style={{
-            animation: "shaking .5s",
-          }}
-        >
-          {score.toLocaleString()}
-        </Navbar.Score>
-      </Navbar.Container>
-
-      {effects.map((effect, idx) => {
-        return (
-          <Effects.Container
-            key={`effect-[${idx}]`}
+    <>
+      <NoSSR>
+        <Navbar.Container>
+          <Navbar.Faculty>{selectedFaculty?.faculty_name}</Navbar.Faculty>
+          <Navbar.Score
+            key={`score-[${score}]`}
             style={{
-              top: `${effect.y}px`,
-              left: `${effect.x}px`,
+              animation: "shaking .5s",
             }}
           >
-            <Effects.Text
+            {score.toLocaleString()}
+          </Navbar.Score>
+        </Navbar.Container>
+
+        {effects.map((effect, idx) => {
+          return (
+            <Effects.Container
+              key={`effect-[${idx}]`}
               style={{
-                color: effect.color,
-                opacity: 0,
-                animation: "fadeOut 3s",
+                top: `${effect.y}px`,
+                left: `${effect.x}px`,
               }}
             >
-              {effect.value}
-            </Effects.Text>
-          </Effects.Container>
-        );
-      })}
+              <Effects.Text
+                style={{
+                  color: effect.color,
+                  opacity: 0,
+                  animation: "fadeOut 3s",
+                }}
+              >
+                {effect.value}
+              </Effects.Text>
+            </Effects.Container>
+          );
+        })}
 
-      <div
-        className="fixed left-1/2 -translate-x-1/2"
-        style={{
-          bottom: isOpenScoreboard ? "0rem" : "-39rem",
-          transition: "all .5s cubic-bezier(0.83, 0.02, 0.29, 0.98) 0s",
-        }}
-      >
-        <Scoreboard
-          isOpen={isOpenScoreboard}
-          openModal={() => setIsOpenScoreboard((isOpen) => !isOpen)}
-        />
-      </div>
-
-      <Character.Container>
-        <img
-          src={isCatAction ? CatWow : CatDefault}
-          width={200}
-          height={200}
+        <div
+          className="fixed left-1/2 -translate-x-1/2"
           style={{
-            width: "auto",
-            height: "80vh",
-            objectFit: "contain",
-            objectPosition: "bottom",
+            bottom: isOpenScoreboard ? "0rem" : "-39rem",
+            transition: "all .5s cubic-bezier(0.83, 0.02, 0.29, 0.98) 0s",
           }}
-          alt={"cat"}
-        />
-      </Character.Container>
-    </NoSSR>
+        >
+          <Scoreboard
+            isOpen={isOpenScoreboard}
+            openModal={() => setIsOpenScoreboard((isOpen) => !isOpen)}
+          />
+        </div>
+
+        <Character.Container>
+          <img
+            src={isCatAction ? CatWow : CatDefault}
+            width={200}
+            height={200}
+            style={{
+              width: "auto",
+              height: "80vh",
+              objectFit: "contain",
+              objectPosition: "bottom",
+            }}
+            alt={"cat"}
+          />
+        </Character.Container>
+      </NoSSR>
+    </>
   );
 }
 
