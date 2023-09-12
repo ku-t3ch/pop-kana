@@ -7,7 +7,7 @@ import { env } from "@/env.mjs";
 import rateLimit from "@/utils/rate-limit";
 
 const limiter = rateLimit({
-  interval: 5 * 1000, // 60 seconds
+  interval: 10 * 1000, // 60 seconds
   uniqueTokenPerInterval: 500, // Max 500 users per second
 });
 
