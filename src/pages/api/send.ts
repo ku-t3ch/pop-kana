@@ -8,8 +8,8 @@ import { env } from "@/env.mjs";
 import rateLimit from "@/utils/rate-limit";
 
 const limiter = rateLimit({
-  interval: 10 * 1000, // 60 seconds
-  uniqueTokenPerInterval: 1000, // Max 500 users per second
+  interval: 10 * 1000, // 10 seconds
+  uniqueTokenPerInterval: 1000, // Max 1000 users per second
 });
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -21,7 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   const { count, facultyId } = body;
-
+ 
   if (count >= 100 || count < 0) {
     return res.status(400).json({ message: "hmmmm!" });
   }
