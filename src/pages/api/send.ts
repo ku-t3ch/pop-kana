@@ -38,7 +38,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       await limiter.check(res, 4, `${detectedIp}-CACHE_TOKEN_3`);
     } else if (count >= 20 && count < 39) {
     //   console.log(`${detectedIp}-CACHE_TOKEN_4`);
-      await limiter.check(res, 5, `${detectedIp}-CACHE_TOKEN_4`);
+      await limiter.check(res, 4, `${detectedIp}-CACHE_TOKEN_4`);
     } else if (count >= 0 && count < 19) {
     //   console.log(`${detectedIp}-CACHE_TOKEN_5`);
       await limiter.check(res, 5, `${detectedIp}-CACHE_TOKEN_5`);
