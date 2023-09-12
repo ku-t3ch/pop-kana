@@ -15,7 +15,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const { body, method } = req;
 
   try {
-    await limiter.check(res, 3, "CACHE_TOKEN");
+    await limiter.check(res, 2, "CACHE_TOKEN");
   } catch (error) {
     return res.status(429).json({ message: "Too Many Requests" });
   }
