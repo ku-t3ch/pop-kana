@@ -33,6 +33,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(400).json({ message: "hmmmm!" });
   }
 
+  if (count <= 0) {
+    return res.status(400).json({ message: "hmmmm!" });
+  }
+
   try {
     await pb.admins.authWithPassword(env.POCKETBASE_EMAIL, env.POCKETBASE_PASSWORD);
     await pb.collection("data").update<DataInterface>(facultyId, {
