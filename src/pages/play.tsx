@@ -6,22 +6,20 @@ import type { EmojiInterface } from "@/interfaces/EmojiInterface";
 import Image from "next/image";
 import NoSSR from "@/components/NoSSR";
 import tw from "tailwind-styled-components";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { use, useEffect, useMemo, useRef, useState } from "react";
 import { randomNumber } from "@/utils/random";
 import { random as getEmoji } from "emoji-random-list";
 import { Howl } from "howler";
 import axios from "axios";
 // assets
 import Background from "@/assets/background.png";
-// import CatWow from "@/assets/cat-wow.png";
-// import CatDefault from "@/assets/cat-default.png";
-
 // components
 import Scoreboard from "@/components/Scoreboard";
 import { useLocalStorage } from "usehooks-ts";
 import { useRouter } from "next/router";
 import { debounce } from "lodash";
 import { CatDefault, CatWow } from "@/assets/catImage";
+import _ from "lodash";
 
 export default function Home() {
   const [selectedFaculty, setSelectedFaculty] = useLocalStorage<DataInterface | null>(
@@ -31,8 +29,10 @@ export default function Home() {
   const { push } = useRouter();
   const stash = useRef<number>(0);
   const stashCheck = useRef<number>(0);
+  const stashCheck2 = useRef<number>(0);
   const isDelay = useRef<boolean>(false);
   const isBot = useRef<boolean>(false);
+  const isBotClick = useRef<boolean>(false);
 
   const [score, setScore] = useState<number>(0);
   const [effects, setEffects] = useState<EmojiInterface[]>([]);
@@ -82,6 +82,7 @@ export default function Home() {
       if (isBot.current) return;
       // check
       stashCheck.current += 1;
+      stashCheck2.current += 1;
 
       // delay
       if (isDelay.current) return;
@@ -94,6 +95,9 @@ export default function Home() {
         html5: true,
       });
       sound.play();
+      sound.once("end", () => {
+        sound.unload();
+      });
 
       // cat animation
       const { innerWidth: width, innerHeight: height } = window;
@@ -141,12 +145,50 @@ export default function Home() {
   //   useEventListener("keydown", handleClick);
 
   useEffect(() => {
-    setInterval(() => {
+    let keyInterval = setInterval(() => {
       if (stashCheck.current > 14) {
         isBot.current = true;
+        clearInterval(keyInterval);
       }
       stashCheck.current = 0;
     }, 1000);
+    return () => {
+      clearInterval(keyInterval);
+    };
+  }, []);
+
+  useEffect(() => {
+    let listCount: number[] = [];
+
+    let keyInterval = setInterval(() => {
+      if (listCount.length === 7 && _.uniq(listCount).length < 3) {
+        isBot.current = true;
+        clearInterval(keyInterval);
+      }
+
+      if (listCount.length >= 7) {
+        let first = listCount[0];
+        let isBotCheck = 0;
+        listCount.map((count) => {
+          if (count === first) {
+            isBotCheck += 1;
+          }
+        });
+
+        if (isBotCheck >= listCount.length) {
+          isBot.current = true;
+          clearInterval(keyInterval);
+        }
+        listCount = [];
+      }
+      if (stashCheck2.current > 0) {
+        listCount.push(stashCheck2.current);
+        stashCheck2.current = 0;
+      }
+    }, 1000);
+    return () => {
+      clearInterval(keyInterval);
+    };
   }, []);
 
   return (
