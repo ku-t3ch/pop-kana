@@ -26,7 +26,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const { count, facultyId } = body;
 
-  if (count > 800) {
+  let limitList = [300, 400, 500];
+  let limitRandom = Math.floor(Math.random() * limitList.length);
+
+  if (count > limitList[limitRandom]!) {
     return res.status(400).json({ message: "hmmmm!" });
   }
 
