@@ -6,16 +6,17 @@ import { Label, Select, Button } from "flowbite-react";
 import { useRouter } from "next/router";
 import { useLocalStorage } from "usehooks-ts";
 import Background from "@/assets/background.png";
-import { Gamepad } from 'lucide-react';
+import { Gamepad } from "lucide-react";
 import Loading from "@/components/Loading";
+import toast from "react-hot-toast";
 
 interface Props {}
 
 const Index: NextPage<Props> = () => {
   const { push } = useRouter();
-  const [isLoading, setisLoading] = useState(true)
+  const [isLoading, setisLoading] = useState(true);
   const [Data, setData] = useState<DataInterface[]>([]);
-  const [selectedFacultyLocal, setSelectedFacultyLocal] = useState<DataInterface>();
+  const [selectedFacultyLocal, setSelectedFacultyLocal] = useState<DataInterface | null>();
   const [selectedFaculty, setSelectedFaculty] = useLocalStorage<DataInterface | null>(
     "faculty-id",
     null
@@ -27,9 +28,8 @@ const Index: NextPage<Props> = () => {
       sort: "-created",
       fields: "faculty_name,id",
     });
-    setisLoading(false)
+    setisLoading(false);
     setData(records);
-    setSelectedFacultyLocal(records[0]);
   };
 
   const onChange = (e: any) => {
@@ -38,6 +38,9 @@ const Index: NextPage<Props> = () => {
   };
 
   const onSubmit = (e: any) => {
+    if (!selectedFacultyLocal) {
+        return toast.error("กรุณาเลือกคณะ");
+    };
     selectedFacultyLocal && setSelectedFaculty(selectedFacultyLocal);
   };
 
@@ -52,21 +55,26 @@ const Index: NextPage<Props> = () => {
     }
   }, [selectedFaculty]);
 
-  if (isLoading) return <Loading />
+  if (isLoading) return <Loading />;
 
   return (
     <div className="flex h-screen flex-col items-center justify-center px-5">
-      <div className="text-[5rem] md:text-[10rem] text-white drop-shadow-lg">POP KU</div>
+      <div className="text-[5rem] text-white drop-shadow-lg md:text-[10rem]">POP KU</div>
       <div className="flex w-full max-w-lg flex-col gap-3">
         <div className="text-xl text-white drop-shadow-lg">เลือกคณะ</div>
         <Select onChange={onChange} required disabled={isLoading}>
+          <option value={""} defaultChecked>
+            กรุณาเลือกคณะ
+          </option>
           {Data.map((e) => (
             <option key={e.id} value={e.id}>
               {e.faculty_name}
             </option>
           ))}
         </Select>
-        <Button onClick={onSubmit}><Gamepad className="mr-2" /> เล่น</Button>
+        <Button onClick={onSubmit}>
+          <Gamepad className="mr-2" /> เล่น
+        </Button>
       </div>
     </div>
   );

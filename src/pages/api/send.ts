@@ -26,7 +26,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const { count, facultyId } = body;
 
-  if (count > 1300) {
+  if (count > 800) {
     return res.status(400).json({ message: "hmmmm!" });
   }
 
