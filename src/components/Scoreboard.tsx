@@ -130,11 +130,14 @@ const Scoreboard: FC<Props> = ({ isOpen = false, openModal, isPage }) => {
                       </motion.p>
                     )}
                   </AnimatePresence>
-                  <CountUp
+                  {/* <CountUp
+                    key={data.id}
                     start={data.count}
                     end={data.count + diffCount}
                     formattingFn={(value) => formatBigNumber(value)}
-                  />
+                  /> */}
+                  {/* <div>{formatBigNumber(data.count)}</div> */}
+                  <div>{Number(data.count).toLocaleString("th-TH")}</div>
                   click{data.count > 1 ? "s" : ""}
                 </div>
               </FacultyItem>

@@ -35,7 +35,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     await pb.admins.authWithPassword(env.POCKETBASE_EMAIL, env.POCKETBASE_PASSWORD);
     await pb.collection("data").update<DataInterface>(facultyId, {
-      "count+": count,
+      "count+": Math.floor(count),
     });
   } catch (err) {
     return res.status(500).json({ message: "Something went wrong!" });
