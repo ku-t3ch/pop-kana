@@ -118,7 +118,7 @@ export default function Home() {
         popList.current[indexPOP]?.play();
       }
 
-      if (stash.current >= 800) {
+      if (stash.current >= 500) {
         updateScoreDefault(stash.current);
       } else {
         updateScore(stash.current);
