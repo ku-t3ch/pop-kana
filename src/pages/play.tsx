@@ -102,54 +102,54 @@ export default function Home() {
     ]);
   };
 
-  const onPop = () => {
-    // if (isBot.current) return;
-    setScore((p) => p + 1);
-    stash.current += 1;
-    stashCheck.current += 1;
-    
-
-    emojiTigger();
-    // sound effect
-    const indexPOP = randomNumber(0, 3);
-    if (popList.current) {
-      popList.current[indexPOP]?.play();
-    }
-
-    if (stash.current >= 800) {
-      updateScoreDefault(stash.current);
-    } else {
-      updateScore(stash.current);
-    }
-  };
+  const [isAlreadyPress, setIsAlreadyPress] = useState(false);
 
   useEffect(() => {
-    document.addEventListener("pointerdown", () => {
+    const onPop = () => {
+      // if (isBot.current) return;
+      setScore((p) => p + 1);
+      stash.current += 1;
+      stashCheck.current += 1;
+
+      emojiTigger();
+      // sound effect
+      const indexPOP = randomNumber(0, 3);
+      if (popList.current) {
+        popList.current[indexPOP]?.play();
+      }
+
+      if (stash.current >= 800) {
+        updateScoreDefault(stash.current);
+      } else {
+        updateScore(stash.current);
+      }
+    };
+
+    const onPress = () => {
+      if (isAlreadyPress) return;
+      if (isBot.current) return;
       setCatAction(true);
+      setIsAlreadyPress(true);
       onPop();
-    });
-    document.addEventListener("keydown", () => {
-      setCatAction(true);
-      onPop();
-    });
-    document.addEventListener("pointerup", () => {
+    };
+    const onUp = () => {
       setTimeout(() => {
         setCatAction(false);
       }, 25);
-    });
-    document.addEventListener("keyup", () => {
-      setTimeout(() => {
-        setCatAction(false);
-      }, 25);
-    });
+      setIsAlreadyPress(false);
+    };
+    document.addEventListener("pointerdown", onPress);
+    document.addEventListener("keydown", onPress);
+    document.addEventListener("pointerup", onUp);
+    document.addEventListener("keyup", onUp);
 
     return () => {
-      document.removeEventListener("pointerdown", () => {});
-      document.removeEventListener("pointerup", () => {});
-      document.removeEventListener("keydown", () => {});
-      document.removeEventListener("keyup", () => {});
+      document.removeEventListener("pointerdown", onPress);
+      document.removeEventListener("pointerup", onUp);
+      document.removeEventListener("keydown", onPress);
+      document.removeEventListener("keyup", onUp);
     };
-  }, []);
+  }, [isAlreadyPress, updateScore, updateScoreDefault]);
 
   useEffect(() => {
     if (effects.length < 10) return;
