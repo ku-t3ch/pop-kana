@@ -127,7 +127,7 @@ export default function Home() {
 
     const onPress = () => {
       if (isAlreadyPress) return;
-      if (isBot.current) return;
+
       setCatAction(true);
       setIsAlreadyPress(true);
       onPop();
@@ -162,7 +162,6 @@ export default function Home() {
 
     let keyInterval = setInterval(() => {
       if (listCount.length === 8 && _.uniq(listCount).length < 3) {
-        isBot.current = true;
         clearInterval(keyInterval);
       }
 
