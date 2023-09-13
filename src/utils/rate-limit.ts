@@ -26,9 +26,9 @@ export default function rateLimit(options?: Options) {
 
         return isRateLimited ? reject() : resolve();
       }),
-    add: (token: string) => {
+    add: (token: string, limit: number) => {
       const tokenCount = (tokenCache.get(token) as number[]) || [0];
-      tokenCount[0] -= 1;
+      tokenCount[0] = limit;
       tokenCache.set(token, tokenCount);
     },
   };
