@@ -105,6 +105,8 @@ const Scoreboard: FC<Props> = ({ isOpen = false, openModal, isPage }) => {
           {_.orderBy(Ranks, ["count"], ["desc"])?.map((data, idx) => {
             const tmpCount = tmpRanks.find((rank) => rank.id === data.id)?.count ?? 0;
             const diffCount = tmpCount - data.count;
+            const countStart = data.count;
+            const countEnd = data.count + diffCount;
             const diffCountFormat = formatBigNumber(diffCount);
 
             return (
@@ -115,31 +117,26 @@ const Scoreboard: FC<Props> = ({ isOpen = false, openModal, isPage }) => {
                 <div className="w-[60vw]">
                   {idx + 1}. {data.faculty_name}
                 </div>
-                <div className="flex w-[40vw] justify-end gap-1 text-end ">
+                <div className="flex w-[40vw] items-center justify-end gap-1 text-end">
                   <AnimatePresence>
                     {diffCount > 0 && (
                       <motion.p
                         animate={{
                           opacity: [0, 1],
+                          transform: ["translateX(1rem)", "translateX(0)"],
                         }}
                         exit={{
                           opacity: [1, 0],
+                          transform: ["translateX(0)", "translateX(1rem)"],
                         }}
-                        className="font-bold "
+                        className="font-bold  text-white"
                       >
                         +{diffCountFormat}
                       </motion.p>
                     )}
                   </AnimatePresence>
-                  {/* <CountUp
-                    key={data.id}
-                    start={data.count}
-                    end={data.count + diffCount}
-                    formattingFn={(value) => formatBigNumber(value)}
-                  /> */}
-                  {/* <div>{formatBigNumber(data.count)}</div> */}
-                  <div>{Number(data.count).toLocaleString("th-TH")}</div>
-                  click{data.count > 1 ? "s" : ""}
+                  {/* <div>{Number(countEnd).toLocaleString("th-TH")}</div> */}
+                  <CountUp start={countStart} end={countEnd} duration={1} separator="," />
                 </div>
               </FacultyItem>
             );

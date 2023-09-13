@@ -201,7 +201,7 @@ export default function Home() {
           <Navbar.Score
             key={`score-[${score}]`}
             style={{
-              animation: "shaking .5s",
+              animation: "shaking .2s",
             }}
           >
             {score.toLocaleString()}
