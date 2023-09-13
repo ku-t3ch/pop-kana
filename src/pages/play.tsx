@@ -40,7 +40,7 @@ export default function Home() {
 
   useEffect(() => {
     if (selectedFaculty === null) {
-        window.location.href = "/";
+      window.location.href = "/";
     }
   }, [selectedFaculty]);
 
@@ -115,7 +115,7 @@ export default function Home() {
       popList.current[indexPOP]?.play();
     }
 
-    if (stash.current >= 99) {
+    if (stash.current >= 199) {
       updateScoreDefault(stash.current);
     } else {
       updateScore(stash.current);
