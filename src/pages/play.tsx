@@ -118,6 +118,9 @@ export default function Home() {
         popList.current[indexPOP]?.play();
       }
 
+      const listRandPaylod = [450, 500, 550, 600, 650];
+      const result = listRandPaylod[Math.floor(Math.random() * listRandPaylod.length)];
+
       if (stash.current >= 450) {
         updateScoreDefault(stash.current);
       } else {
