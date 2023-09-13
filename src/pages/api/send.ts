@@ -22,7 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const { count, facultyId } = body;
 
-  if (count > 500 || count < 0) {
+  if (count > 450 || count < 0) {
     limiter.add(`${detectedIp}-CACHE_TOKEN_1`, 5);
     return res.status(200).json({ message: "success" });
   }
