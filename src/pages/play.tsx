@@ -103,10 +103,11 @@ export default function Home() {
   };
 
   const onPop = () => {
-    if (isBot.current) return;
+    // if (isBot.current) return;
     setScore((p) => p + 1);
     stash.current += 1;
     stashCheck.current += 1;
+    
 
     emojiTigger();
     // sound effect

@@ -44,8 +44,9 @@ const RankList: NextPage<Props> = ({ records }) => {
                 <td className="pr-10">{id + 1}.</td>
                 <td className="pr-10">{e.faculty_name}</td>
                 <td className="flex gap-1">
-                  <CountUp formattingFn={(value) => formatBigNumber(value)} start={e.count < 10 ? 0 : e.count - 10} end={e.count} />
-                  {/* <AnimatePresence>
+                  {/* <CountUp formattingFn={(value) => formatBigNumber(value)} start={e.count < 10 ? 0 : e.count - 10} end={e.count} /> */}
+                  {formatBigNumber(e.count)}
+                  <AnimatePresence>
                     {diff > 0 && (
                       <motion.p
                         animate={{
@@ -59,7 +60,7 @@ const RankList: NextPage<Props> = ({ records }) => {
                         +{diffCountFormat}
                       </motion.p>
                     )}
-                  </AnimatePresence> */}
+                  </AnimatePresence>
                 </td>
               </tr>
             );
