@@ -46,14 +46,15 @@ const Scoreboard: FC<Props> = ({ isOpen = false, openModal, isPage }) => {
 
     // setup sync data
     pb.collection("data").subscribe<DataInterface>("*", function (e) {
-      const newData = records.map((item) => {
-        if (item.id === e.record.id) {
-          return e.record;
-        }
-        return item;
+      setTmpRanks((prev) => {
+        const newData = prev?.map((item) => {
+          if (item.id === e.record.id) {
+            return e.record;
+          }
+          return item;
+        });
+        return newData;
       });
-
-      setTmpRanks(newData);
     });
   };
 

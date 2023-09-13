@@ -36,11 +36,15 @@ const RankList: NextPage<Props> = ({ records }) => {
     <div className="flex flex-col">
       <table>
         <tbody>
-          {_.orderBy(records, ["count"], ["desc"])?.map((e, id) => {
+          {records.map((e, id) => {
             const diff = e.count - (tmpRanks?.[id]?.count || 0);
             const diffCountFormat = formatBigNumber(diff);
             return (
-              <tr key={id} style={{ color: rankColor(id + 1) }} className={clsx(diff > 0 && "bg-green-500/50","duration-100")}>
+              <tr
+                key={id}
+                style={{ color: rankColor(id + 1) }}
+                className={clsx(diff > 0 && "bg-green-500/50", "duration-100")}
+              >
                 <td className="pr-10">{id + 1}.</td>
                 <td className="pr-10">{e.faculty_name}</td>
                 <td className="flex gap-1">

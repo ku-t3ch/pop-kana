@@ -30,32 +30,46 @@ const Rank: NextPage<Props> = () => {
 
     // setup sync data
     pb.collection("data").subscribe<DataInterface>("*", function (e) {
-      const newData = records.map((item) => {
-        if (item.id === e.record.id) {
-          return e.record;
-        }
-        return item;
+      setRanks((prev) => {
+        const newData = prev?.map((item) => {
+          if (item.id === e.record.id) {
+            return e.record;
+          }
+          return item;
+        });
+        return newData;
       });
-      setRanks(newData);
     });
   };
 
   if (!Ranks) return <Loading />;
 
-  const ranksSorted = _.orderBy(Ranks, ["count"], ["desc"])
+  const ranksSorted = _.orderBy(Ranks, ["count"], ["desc"]);
 
   return (
     <div className="grid h-full w-screen grid-cols-1 lg:grid-cols-2">
       <div className="hidden h-screen min-h-full flex-col lg:flex">
-        <PlacesImage facultyName={ranksSorted[0]?.faculty_name as string} rank={ranksSorted[0]!} place={<div className="text-4xl">1st</div>} />
-        <PlacesImage facultyName={ranksSorted[1]?.faculty_name as string} rank={ranksSorted[1]!} place={<div className="text-4xl">2nd</div>} />
-        <PlacesImage facultyName={ranksSorted[2]?.faculty_name as string} rank={ranksSorted[2]!} place={<div className="text-4xl">3rd</div>} />
+        <PlacesImage
+          facultyName={ranksSorted[0]?.faculty_name as string}
+          rank={ranksSorted[0]!}
+          place={<div className="text-4xl">1st</div>}
+        />
+        <PlacesImage
+          facultyName={ranksSorted[1]?.faculty_name as string}
+          rank={ranksSorted[1]!}
+          place={<div className="text-4xl">2nd</div>}
+        />
+        <PlacesImage
+          facultyName={ranksSorted[2]?.faculty_name as string}
+          rank={ranksSorted[2]!}
+          place={<div className="text-4xl">3rd</div>}
+        />
       </div>
       <div className="relative flex h-screen flex-row overflow-y-auto text-3xl">
         <div className={styles.imgBackground}>
           <div className={styles.imgLogo}></div>
           <div className="relative m-5">
-            <RankList records={Ranks} />
+            <RankList records={ranksSorted} />
           </div>
         </div>
       </div>
