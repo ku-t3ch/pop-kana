@@ -22,10 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const { count, facultyId } = body;
 
-  const listRandPaylod = [651,652,655];
-  const result = listRandPaylod[Math.floor(Math.random() * listRandPaylod.length)];
-
-  if (count > result! || count < 0) {
+  if (count > 300 || count < 0) {
     limiter.add(`${detectedIp}-CACHE_TOKEN_1`, 5);
     return res.status(200).json({ message: "success" });
   }

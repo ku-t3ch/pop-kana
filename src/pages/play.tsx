@@ -106,7 +106,7 @@ export default function Home() {
 
   useEffect(() => {
     const onPop = () => {
-      // if (isBot.current) return;
+      if (isBot.current) return;
       setScore((p) => p + 1);
       stash.current += 1;
       stashCheck.current += 1;
@@ -117,11 +117,8 @@ export default function Home() {
       if (popList.current) {
         popList.current[indexPOP]?.play();
       }
-
-      const listRandPaylod = [450, 500, 550, 600, 650];
-      const result = listRandPaylod[Math.floor(Math.random() * listRandPaylod.length)];
-
-      if (stash.current >= 450) {
+      
+      if (stash.current >= 300) {
         updateScoreDefault(stash.current);
       } else {
         updateScore(stash.current);
