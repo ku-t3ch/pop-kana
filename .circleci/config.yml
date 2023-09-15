@@ -23,9 +23,9 @@ jobs:
           command: |
             echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
             docker push $DOCKER_USERNAME/pop-ku:latest
-      - run:
-          name: "Trigger Portainer"
-          command: curl --location --request POST $PT_TRIGGER_API
+      # - run:
+      #     name: "Trigger Portainer"
+      #     command: curl --location --request POST $PT_TRIGGER_API
 
 workflows:
   version: 2
