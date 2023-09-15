@@ -34,11 +34,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
+    pb.autoCancellation(false);
     await pb.admins.authWithPassword(env.POCKETBASE_EMAIL, env.POCKETBASE_PASSWORD);
     await pb.collection("data").update<DataInterface>(facultyId, {
       "count+": Math.floor(count),
     });
   } catch (err) {
+    console.log(err)
     return res.status(500).json({ message: "Something went wrong!" });
   }
 
